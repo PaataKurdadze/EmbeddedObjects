@@ -1,49 +1,34 @@
 ﻿using ConsoleApp1;
 
-var organizations = new List<Organization>()
+var organizations = new List<Organization>
 {
-    new Organization{Id = 7, Name ="AB", ParentId = 1},
-    new Organization
-    {
-        Id = 1,
-        Name ="A"
-    },
-    new Organization
-    {
-        Id = 2,
-        Name ="B",
-        ParentId = 1
-    },
-    new Organization
-    {
-        Id = 3,
-        Name ="C",
-        ParentId = 2
-    },
-    //new Organization
-    //{
-    //    Id = 4,
-    //    Name ="D",
-    //    ParentId = 1
-    //},
-     new Organization { Id = 5, Name ="AA"},
-     new Organization { Id = 6, Name ="BB", ParentId = 5}
+    new Organization {Id = 4, Name = "DD", ParentId = 1},
+    new Organization {Id = 1, Name = "A"},
+    new Organization {Id = 2, Name = "B", ParentId = 1},
+    new Organization {Id = 3, Name = "C", ParentId = 2},
+    new Organization {Id = 4, Name = "D", ParentId = 1},
+    new Organization {Id = 5, Name = "AA"},
+    new Organization {Id = 6, Name = "BB", ParentId = 5}
 };
 
 var obj = GetEmbeddedObjects(organizations);
 
+Console.ReadKey();
 
-static List<Organization> GetEmbeddedObjects(List<Organization> organizations)
+
+static IEnumerable<Organization> GetEmbeddedObjects(IList<Organization> organizations)
 {
     List<Organization> result = new();
 
-    foreach (var item in organizations)
+    for (var i = 0; i < organizations.Count; i++)
     {
+        var item = organizations[i];
         if (item.ParentId != null) continue;
 
         result.Add(item);
 
         organizations.Remove(item);
+        i = -1;
 
         result[^1].Organizations = GetChildren(item.Id, ref organizations);
     }
@@ -52,35 +37,21 @@ static List<Organization> GetEmbeddedObjects(List<Organization> organizations)
 }
 
 
-static List<Organization> GetChildren(int Id, ref List<Organization> organizations)
+static List<Organization> GetChildren(int Id, ref IList<Organization> organizations)
 {
     List<Organization> temp = new();
 
-    foreach (var item in organizations)
+    for (var i = 0; i < organizations.Count; i++)
     {
-        if (item.ParentId == Id)
-        {
-            organizations.Remove(item);
-            item.Organizations = GetChildren(item.Id, ref organizations);
-            temp.Add(item);
-        }
+        var item = organizations[i];
+        if (item.ParentId != Id) continue;
+
+        organizations.Remove(item);
+        i--;
+
+        item.Organizations = GetChildren(item.Id, ref organizations);
+        temp.Add(item);
     }
 
     return temp;
 }
-
-
-
-
-
-
-
-/*
- * Organization embeddedObjects = new()
-        {
-            Id = item.Id,
-            Name = item.Name,
-            Organizations = GetChildren(item.Id, ref organizations)
-        };
-
-        result.Add(embeddedObjects);*/
