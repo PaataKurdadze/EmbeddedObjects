@@ -1,4 +1,5 @@
 ﻿using ConsoleApp1;
+using System.Text.Json;
 
 var organizations = new List<Organization>
 {
@@ -13,6 +14,10 @@ var organizations = new List<Organization>
 
 var obj = GetEmbeddedObjects(organizations);
 
+
+var options = new JsonSerializerOptions { WriteIndented = true };
+string jsonString = JsonSerializer.Serialize(obj, options);
+Console.WriteLine(jsonString);
 Console.ReadKey();
 
 
@@ -47,7 +52,7 @@ static List<Organization> GetChildren(int Id, ref IList<Organization> organizati
         if (item.ParentId != Id) continue;
 
         organizations.Remove(item);
-        i--;
+        i--; //i = -1;
 
         item.Organizations = GetChildren(item.Id, ref organizations);
         temp.Add(item);

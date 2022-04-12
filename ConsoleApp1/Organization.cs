@@ -9,5 +9,6 @@
         public int? ParentId { get; set; }
 
         public List<Organization>? Organizations { get; set; }
+
     }
 }
