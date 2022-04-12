@@ -39,22 +39,27 @@ static List<Organization> GetEmbeddedObjects(List<Organization> organizations)
     {
         if (item.ParentId != null) continue;
 
+        result.Add(item);
+
+        organizations.Remove(item);
+
+        result[item.Id].Organizations = GetChildren(item.Id, ref organizations);
+
         Organization embeddedObjects = new()
         {
             Id = item.Id,
-            Name = item.Name
+            Name = item.Name,
+            Organizations = GetChildren(item.Id, ref organizations)
         };
 
-        organizations.RemoveAt(item.Id);
-
-        embeddedObjects.Organizations = FindChildren(item.Id, ref organizations);
+        result.Add(embeddedObjects);
     }
 
-    return null;
+    return result;
 }
 
 
-static List<Organization> FindChildren(int Id, ref List<Organization> organizations)
+static List<Organization> GetChildren(int Id, ref List<Organization> organizations)
 {
     List<Organization> temp = new();
 
@@ -62,8 +67,8 @@ static List<Organization> FindChildren(int Id, ref List<Organization> organizati
     {
         if (item.ParentId == Id)
         {
-            organizations.RemoveAt(item.Id);
-            item.Organizations = FindChildren(item.Id, ref organizations);
+            organizations.Remove(item);
+            item.Organizations = GetChildren(item.Id, ref organizations);
             temp.Add(item);
         }
     }
