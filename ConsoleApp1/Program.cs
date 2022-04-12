@@ -20,15 +20,17 @@ var organizations = new List<Organization>()
         Name ="C",
         ParentId = 2
     },
-    new Organization
-    {
-        Id = 4,
-        Name ="D",
-        ParentId = 1
-    },
+    //new Organization
+    //{
+    //    Id = 4,
+    //    Name ="D",
+    //    ParentId = 1
+    //},
      new Organization { Id = 5, Name ="AA"},
      new Organization { Id = 6, Name ="BB", ParentId = 5}
 };
+
+var obj = GetEmbeddedObjects(organizations);
 
 
 static List<Organization> GetEmbeddedObjects(List<Organization> organizations)
@@ -43,16 +45,7 @@ static List<Organization> GetEmbeddedObjects(List<Organization> organizations)
 
         organizations.Remove(item);
 
-        result[item.Id].Organizations = GetChildren(item.Id, ref organizations);
-
-        Organization embeddedObjects = new()
-        {
-            Id = item.Id,
-            Name = item.Name,
-            Organizations = GetChildren(item.Id, ref organizations)
-        };
-
-        result.Add(embeddedObjects);
+        result[^1].Organizations = GetChildren(item.Id, ref organizations);
     }
 
     return result;
@@ -75,3 +68,19 @@ static List<Organization> GetChildren(int Id, ref List<Organization> organizatio
 
     return temp;
 }
+
+
+
+
+
+
+
+/*
+ * Organization embeddedObjects = new()
+        {
+            Id = item.Id,
+            Name = item.Name,
+            Organizations = GetChildren(item.Id, ref organizations)
+        };
+
+        result.Add(embeddedObjects);*/
