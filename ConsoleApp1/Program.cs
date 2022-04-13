@@ -3,11 +3,11 @@ using System.Text.Json;
 
 var organizations = new List<Organization>
 {
-    new Organization {Id = 4, Name = "DD", ParentId = 1},
+    new Organization {Id = 7, Name = "AE", ParentId = 1},
     new Organization {Id = 1, Name = "A"},
     new Organization {Id = 2, Name = "B", ParentId = 1},
     new Organization {Id = 3, Name = "C", ParentId = 2},
-    new Organization {Id = 4, Name = "D", ParentId = 1},
+    new Organization {Id = 4, Name = "AD", ParentId = 1},
     new Organization {Id = 5, Name = "AA"},
     new Organization {Id = 6, Name = "BB", ParentId = 5}
 };
@@ -52,7 +52,7 @@ static List<Organization> GetChildren(int Id, ref IList<Organization> organizati
         if (item.ParentId != Id) continue;
 
         organizations.Remove(item);
-        i--; //i = -1;
+        i--;
 
         item.Organizations = GetChildren(item.Id, ref organizations);
         temp.Add(item);
